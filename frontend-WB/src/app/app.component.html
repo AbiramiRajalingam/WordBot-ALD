@@ -1,0 +1,290 @@
+<!-- Image and text -->
+<!-- *********** application header here! ***********-->
+<nav class="navbar navbar-light" style="background-color: #e9ecef">
+    <span class="bottitle">Ableist Word Bot</span>
+    <a class="navbar-brand" href="#">
+        <img src="../assets/images/Abli-3.png" width="120" height="50"   class="d-inline-block align-top" alt="">
+    </a>
+    <a style="margin-left: 20%;">
+        <span data-toggle="modal" data-target="#pwdmanage">
+            <img src="../assets/images/admin-ui.png" width="30" height="30" style="margin-right: 20px;" class="d-inline-block align-top" alt="">
+        </span>
+        <span  data-toggle="modal" data-target="#exampleModalCenter">
+            <img src="../assets/images/server-storage.png" width="30" height="30" style="margin-right: 20px;" class="d-inline-block align-top" alt="">
+        </span>
+        <span (click)="homePage()">
+            <img src="../assets/images/home.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        </span>
+    </a>
+ 
+</nav>
+
+<!-- *********** alert messages ***********-->
+
+<div class="alert  alert-dismissible" role="alert" *ngIf="alertTab==='show'" [ngClass]="{
+    'alert-success':alertValue === 'success',
+    'alert-danger':alertValue === 'danger',
+    'alert-info':alertValue === 'info'
+  }">
+    <strong>{{alertGesture}}</strong> {{alertMessage}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<!-- *********** introduction box ***********-->
+
+<div class="row" style="margin-top: 3%;" *ngIf="workingpage=='home'">
+
+    <div class="card" style="margin-left: 3%;width: 66%;">
+        <div class="card-body">
+            <h5 class="card-title">What is Ableist word bot? </h5>
+            <p class="card-text">{{wordbot_intro}}</p>
+            <p class="card-text">{{ableist_intro}}</p>
+            <p class="card-text">{{technique_procedure}}</p>
+        </div>
+    </div>
+    <!-- *********** details box ***********-->
+
+    <div class="card border-info mb-3" style="max-width: 18rem;margin-left: 3%">
+        <div class="card-header">Words Detected</div>
+        <div class="card-body text-info">
+            <p class="card-text" style="font-size: 50px;text-align: center">{{wordCount.data}}</p>
+        </div>
+    </div>
+
+    <div class="card border-info mb-3 " style="max-width: 18rem;margin-left: 3%;">
+        <div class="card-header">Jobs Posted</div>
+        <div class="card-body text-info">
+            <p class="card-text" style="font-size: 50px;text-align: center">{{joblength}}</p>
+        </div>
+    </div>
+</div>
+
+<!-- *********** get started button ***********-->
+
+<div class="card text-white playcard" style="margin-top: 3%;" *ngIf="workingpage=='home'" (click)="startPage()">
+    <!-- <img class="card-img" src=".../100px270/#55595c:#373a3c/text:Card image" alt="Card image"> -->
+    <div class="card-img-overlay" style="position: relative;margin-top: 5%;">
+        <h5 class="card-title" style="text-align: center;color: black;">Get Started</h5>
+        <p style="display: flex;justify-content: center;">
+            <img src="../assets/images/play.png" alt="" height="50px">
+        </p>
+    </div>
+</div>
+
+<!-- *********** word bot working page ***********-->
+
+<div *ngIf="workingpage=='jdpage'">
+    <form>
+        <div class="form-group" style="margin-top: 1%;width: 95%;margin-left: 2%;">
+            <label for="exampleFormControlTextarea1" style="font-weight: bold;" *ngIf="boxType==='fetch'">Job
+                Description -
+                {{jobData.Company[indvalue]}}</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"
+                [(ngModel)]="jobData.Description[indvalue]" [ngModelOptions]="{standalone: true}" readonly
+                placeholder="A description of the job will appear here." *ngIf="boxType==='fetch'"></textarea>
+
+            <label for="exampleFormControlTextarea1" style="font-weight: bold;" *ngIf="boxType==='post'">Job
+                Description</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"
+                placeholder="Paste your job description here." *ngIf="boxType==='post'"></textarea>
+        </div>
+        <button type="button" class="btn btn-info" style="margin-left: 30%;" (click)="showJobDesc()">Fetch</button>
+        <button type="button" class="btn btn-info" style="margin-left: 5%;" (click)="getToPost()">Post</button>
+        <button type="button" class="btn btn-info"  style="margin-left: 20%;background-color: #0d70db;" (click)="getHighlightedText()">Select</button>
+        <!-- <button type="button" class="btn btn-info" style="margin-left: 5%;">paste url</button> -->
+        <!-- <div class="form-group" style="width: 95%;margin-left: 2%;margin-top: 1%;">
+            <label for="exampleFormControlTextarea2" style="font-weight: bold;">Abelist Words</label>
+            <textarea class="form-control" id="exampleFormControlTextarea2" rows="1" [(ngModel)]="job.ablwords"
+                [ngModelOptions]="{standalone: true}"
+                placeholder="list down all the abelist words that you have come across with a comma separation."></textarea>
+        </div> -->
+        <!-- <button type="button" class="btn btn-secondary" (click)='onAddData()' style="margin-left: 50%;">Next</button> -->
+        <br>
+        <label style="font-weight: bold;margin-top: 1%;margin-left: 2%;" *ngIf="ablwords2.length>0">Alternate
+            Words</label>
+        <div class="row" *ngFor="let item of ablwords2;let i = index" style="margin-top: 1%;margin-left: 2%;">
+            <div class="col">
+                <input type="text" class="form-control col-10" placeholder="abelist word" [(ngModel)]="ablwords2[i]"
+                    [ngModelOptions]="{standalone: true}" readonly>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control col-10" placeholder="alternate word" [(ngModel)]="ablwords3[i]"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-danger" style="margin-left: 2%;"
+                    (click)="deleteWord(i)">Delete</button>
+            </div>
+        </div>
+    </form>
+    <div style="margin-top:1%">
+        <button type="button" class="btn btn-primary" (click)='Submit()' style="margin-left: 50%;"
+            *ngIf="ablwords2.length>0">Submit</button>
+    </div>
+</div>
+
+
+<!-- *********** word bot admin page ***********-->
+
+<div *ngIf="workingpage=='guest' || workingpage=='admin' ">
+
+    <div class="card" style="margin-top: 1%;">
+        <div class="card-body">
+          This is a master data view section.
+        </div>
+      </div>
+
+    <table class="table table-hover table-info" style="margin-top: 1%;">
+        <thead>
+          <tr >
+            <th scope="col" style="font-weight: 600;font-family: monospace;">S.No.</th>
+            <th scope="col" style="font-weight: 600;font-family: monospace;">Abelist Word</th>
+            <th scope="col" style="font-weight: 600;font-family: monospace;">Suggestion Word</th>
+            <th scope="col" style="font-weight: 600;font-family: monospace;" *ngIf="actionsButtons">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of masterData | paginate: {id:'master_pagination', itemsPerPage: 20, currentPage: p,totalItems: masterData.length } let i = index">
+            <th style="width:100px;font-weight: 300;font-family: monospace;">{{20*(p-1)+i+1}}</th>
+            <td style="width:300px;font-weight: 300;font-family: monospace;">{{data[0]}}</td>
+            <td style="width:700px;font-weight: 300;font-family: monospace;">{{data[1]}}</td>
+            <td style="width:200px" *ngIf="actionsButtons">
+                <img src="../assets/images/edit.png" height="30" (click)="editRecord(i)"
+                data-toggle="modal"  data-target="#editview"> &nbsp;&nbsp;&nbsp;
+                <img src="../assets/images/delete.png" height="30" data-toggle="modal" 
+                data-target="#deleteModal" (click)="deleteConfirmation(i)">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-left: 30%;">
+        <pagination-controls  (pageChange)="p = $event" class="my-pagination" id="master_pagination"></pagination-controls>
+      </div>
+      
+</div>
+
+<!-- *********** login modal popup ***********-->
+
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <button type="button"  style="width: 300px;margin-left: 15%;" class="btn btn-info btn-md" data-dismiss="modal"
+            (click)="viewDbPage('guest')">Guest</button>
+            <br>
+            <br>
+            <button type="button" style="width: 300px;margin-left: 15%" class="btn btn-info btn-md"
+            data-toggle="modal" data-dismiss="modal"  data-target="#loginviewcenter" >Admin</button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="margin-right: 45%;" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="loginviewcenter" tabindex="-1" role="dialog" aria-labelledby="loginviewcentertitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                  <label for="userid" class="col-form-label">User Id:</label>
+                  <input type="text" class="form-control" id="userid" autocomplete="off" 
+                  [(ngModel)]="loginCredentials.userId" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="form-group">
+                  <label for="password" class="col-form-label">Password:</label>
+                  <input type="password" class="form-control" id="password" autocomplete="off" 
+                  [(ngModel)]="loginCredentials.password" [ngModelOptions]="{standalone: true}">
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="margin-right: 5%;" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" style="margin-right: 40%;" data-dismiss="modal" 
+          (click)="viewDbPage('admin')">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- *********** delete confirmation modal popup ***********-->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModaltitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+           Do you want to delete {{deleteName}} and its components ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="margin-right: 5%;" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-danger" style="margin-right: 40%;" 
+          data-dismiss="modal" (click)="deleteData()">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- *********** delete confirmation modal popup ***********-->
+  <div class="modal fade" id="editview" tabindex="-1" role="dialog" aria-labelledby="editviewtitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                  <label for="ablw" class="col-form-label">Abelist Word</label>
+                  <input type="text" class="form-control" id="ablw" autocomplete="off" 
+                  [(ngModel)]="editmodel.ablWord" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="form-group">
+                  <label for="sugstnWord" class="col-form-label">Suggestion Word</label>
+                  <input type="text" class="form-control" id="sugstnWord" autocomplete="off" 
+                  [(ngModel)]="editmodel.sugstnWord" [ngModelOptions]="{standalone: true}">
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="margin-right: 5%;" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" style="margin-right: 40%;" data-dismiss="modal" 
+            (click)="saveEdit()">save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- *********** password management modal popup ***********-->
+  <div class="modal fade" id="pwdmanage" tabindex="-1" role="dialog" aria-labelledby="pwdmanagetitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <form>
+                <div class="form-group">
+                  <label for="userid" class="col-form-label">User Id:</label>
+                  <input type="text" class="form-control" id="userid" autocomplete="off" 
+                  [(ngModel)]="pwdData.userid" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="form-group">
+                  <label for="oldpassword" class="col-form-label">Old Password:</label>
+                  <input type="text" class="form-control" id="oldpassword" autocomplete="off" 
+                  [(ngModel)]="pwdData.oldpwd" [ngModelOptions]="{standalone: true}">
+                </div>
+                <div class="form-group">
+                    <label for="newpassword" class="col-form-label">New Password:</label>
+                    <input type="text" class="form-control" id="newpassword" autocomplete="off" 
+                    [(ngModel)]="pwdData.newpwd" [ngModelOptions]="{standalone: true}">
+                  </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" style="margin-right: 5%;" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" style="margin-right: 40%;" data-dismiss="modal" 
+          >Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
